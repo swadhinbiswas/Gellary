@@ -2,7 +2,6 @@ from ast import In
 from typing import Coroutine, List,Any,Final, Optional
 from uuid import UUID,uuid4
 from beanie import Document,Indexed
-from click import Option
 from pymongo.client_session import ClientSession
 from zmq import has
 

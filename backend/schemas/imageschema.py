@@ -1,6 +1,6 @@
 from typing import Optional, List, Any
 
-from uuid import UUID, uuid4
+
 from pydantic import BaseModel,EmailStr,Field
 from model.imagemodel import ImageModel
 
@@ -12,10 +12,16 @@ class ImageBase(BaseModel):
   thumbnail_path:str=Field(...,description="Path to the thumbnail")
   
 class ImageOut(BaseModel):
-name
+  name:str
+  description:str
+  tags:List[str]
+  image_path:str
+  thumbnail_path:str
+  
 class Update(BaseModel):
   name:Optional[str]
   description:Optional[str]
   tags:Optional[List[str]]
   image_path:Optional[str]
   thumbnail_path:Optional[str]
+  
