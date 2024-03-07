@@ -15,7 +15,10 @@ class ImageModel(Document):
   thumbnail_path: str
 
   def __repr__(self) -> str:
-    return f"ImageModel(name={self.name},description={self.description},tags={self.tags},created_at={self.created_at},updated_at={self.updated_at},image_path={self.image_path},thumbnail_path={self.thumbnail_path})"
+    return f"ImageModel(name={self.name},description={self.description},
+  tags={self.tags},created_at={self.created_at},
+  updated_at={self.updated_at},image_path={self.image_path},
+  thumbnail_path={self.thumbnail_path})"
   
   def __str__(self) -> str:
     return self.__repr__()
@@ -31,27 +34,35 @@ class ImageModel(Document):
   @property
   def id(self) -> Any:
     return self._id
+  
   @property
   def name(self) -> str:
     return self._name
+  
   @property
   def description(self) -> str:
     return self._description
+  
   @property
   def tags(self) -> List[str]:
     return self._tags
+  
   @property
   def created_at(self) -> datetime:
     return self._created_at
+  
   @property
   def updated_at(self) -> datetime:
     return self._updated_at
+  
   @property
   def image_path(self) -> str:
     return self._image_path
+  
   @property
   def thumbnail_path(self) -> str:
     return self._thumbnail_path
+  
   @id.setter
   def id(self, value: Any):
     self._id = value
@@ -63,6 +74,7 @@ class ImageModel(Document):
   @classmethod
   async def get_by_title(cls, name:str ):
     return await cls.get_one({"name":name})
+  @classmethod
   async def get_by_tages(cls, tags:List[str]):
     return await cls.get_many({"tags":tags})
   
