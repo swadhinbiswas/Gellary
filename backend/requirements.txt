@@ -1,0 +1,21 @@
+black
+anyio
+cffi
+click
+cryptography
+fastapi
+flake8
+h11
+idna
+isort
+pre-commit
+pycparser
+pydantic
+PyJWT
+python-dotenv
+secure
+sniffio
+starlette
+typing_extensions
+uvicorn
+setuptools # not directly required, pinned by Snyk to avoid a vulnerability
