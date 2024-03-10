@@ -1,7 +1,5 @@
 from dataclasses import dataclass
 import jwt
-from matplotlib.pylab import f
-from Gellary.backend import auth
 from settings import setting
 from expreance import BadCredentialsException,UnableCredentialsException
 
@@ -11,14 +9,27 @@ class JsontoWebToken:
     auth0_domain: str=f"{setting.AUTH0_DOMAIN}/"
     auth0_audience: str=setting.AUTH0_AUDIENCE
     algorithm: str=setting.ALGORITHM
-    jwks=f"{auth0_domain}.well-known/jwks.json"
+    jwt_url=f"{auth0_domain}.well-known/jwks.json"
     
     def verify_jwt(self):
         try:
-            unverified_header = jwt.get_unverified_header(self.jwt_access_token)
-        except jwt.JWTError:
-            raise BadCredentialsException
-        if unverified_header["alg"] != "RS256":
-            raise UnableCredentialsException
-        return unverified_header
+          jwt_client=jwt.PyJWKClient(jwks_uri=self.jwt_url)
+          jwt_signingkey=jwt_client.get_signing_key_from_jwt(self.jwt_access_token).key
+          payload=jwt.decode(self.jwt_access_token, 
+                             jwt_signingkey, 
+                             algorithms=[self.algorithm],
+                             audience=self.auth0_audience,
+                             issuer=self.auth0_domain)
+          
+        except jwt.exceptions.PyJWKClinetError:
+          raise UnableCredentialsException
+        except jwt.exceptions.PyJWTError:
+          raise BadCredentialsException
+        except jwt.exceptions.InvalidTokenError:
+          raise BadCredentialsException
+        
+        return payload
       
+    def validate(self):
+        return self.verify_jwt()
+#      
