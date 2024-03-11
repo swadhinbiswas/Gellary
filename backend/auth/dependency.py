@@ -1,7 +1,7 @@
 from typing import List
-from auth_hader import get_bearer_token
-from json_web_token import JsontoWebToken
-from expreance import PermissionDeniedException
+from auth.auth_hader import get_bearer_token
+from auth.json_web_token import JsontoWebToken
+from auth.expreance import PermissionDeniedException
 from fastapi import Depends
 
 def valid_token(token: str = Depends(get_bearer_token)):

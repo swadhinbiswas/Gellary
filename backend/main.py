@@ -1,7 +1,6 @@
 from fastapi import FastAPI,Depends
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-from fastapi.encoders import jsonable_encoder 
 import secure 
 from auth.dependency import valid_token
 from auth.setting import settings

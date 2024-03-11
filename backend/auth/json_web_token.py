@@ -1,8 +1,8 @@
 from dataclasses import dataclass
 import jwt
 import os
-from setting import settings 
-from expreance import BadCredentialsException,UnableCredentialsException
+from auth.setting import settings 
+from auth.expreance import BadCredentialsException,UnableCredentialsException
 
 @dataclass
 class JsontoWebToken:
