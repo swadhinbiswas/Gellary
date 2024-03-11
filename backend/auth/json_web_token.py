@@ -1,14 +1,14 @@
 from dataclasses import dataclass
 import jwt
-from settings import setting
+from setting import settings as Settings
 from expreance import BadCredentialsException,UnableCredentialsException
 
 @dataclass
 class JsontoWebToken:
     jwt_access_token: str
-    auth0_domain: str=f"{setting.AUTH0_DOMAIN}/"
-    auth0_audience: str=setting.AUTH0_AUDIENCE
-    algorithm: str=setting.ALGORITHM
+    auth0_domain: str=f"{Settings.AUTH0_DOMAIN}/"
+    auth0_audience: str=f"{Settings.AUTH0_AUDIENCE}/"
+    algorithm: str=f"{Settings.ALGORITHM}"
     jwt_url=f"{auth0_domain}.well-known/jwks.json"
     
     def verify_jwt(self):
@@ -32,4 +32,3 @@ class JsontoWebToken:
       
     def validate(self):
         return self.verify_jwt()
-#      

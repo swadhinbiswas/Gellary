@@ -11,7 +11,7 @@ class ImageService:
       imagename=image.imagename,
       imagedescription=image.imagedescription,
       imageurl=image.imageurl,
-      tags=image.tags
+      tags=image.tags,
     )
     await image_in.save()
     return image_in

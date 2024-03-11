@@ -22,12 +22,7 @@ class TagModel(Document):
   @property
   def name(self) -> str:
     return self._name
-  @id.setter
-  def id(self, value: Any):
-    self._id = value
-  @name.setter
-  def name(self, value: str):
-    self._name = value
+
     
   class Collection:
     name="tagmodel"

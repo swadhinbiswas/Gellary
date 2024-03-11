@@ -15,10 +15,7 @@ class ImageModel(Document):
   thumbnail_path: str
 
   def __repr__(self) -> str:
-    return f"ImageModel(name={self.name},description={self.description},
-  tags={self.tags},created_at={self.created_at},
-  updated_at={self.updated_at},image_path={self.image_path},
-  thumbnail_path={self.thumbnail_path})"
+    return f"ImageModel(name={self.name},description={self.description},tags={self.tags},created_at={self.created_at},updated_at={self.updated_at},image_path={self.image_path},thumbnail_path={self.thumbnail_path})"
   
   def __str__(self) -> str:
     return self.__repr__()

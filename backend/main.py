@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from fastapi.encoders import jsonable_encoder 
 import secure 
+from auth.dependency import valid_token,PermissionValidation
 from settings.setting import settings
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
@@ -12,10 +13,7 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 
 
 app = FastAPI(
-    openapi_url=f"{settings.API_V1_STR}/openapi.json",
-    docs_url=f"{settings.API_V1_STR}/docs",
-    redoc_url=f"{settings.API_V1_STR}/redoc",
-    
+    description="Photo Doc"
 )
 
 csp=secure.ContentSecurityPolicy().default_src("'self'").frame_ancestors("'none'")
@@ -50,13 +48,21 @@ app.add_middleware(
     allow_headers=["Authorization", "Content-Type", "Accept", "Accept-Encoding", "Accept-Language", "Origin", "Referer", "User-Agent", "X-Requested-With", "X-CSRF-Token", "X-CSRFToken", "X-XSRF-TOKEN"],
 )
 
+@app.exception_handler(StarletteHTTPException)
+async def http_exception_handler(request, exc):
+    message = str(exc.detail)
+
+    return JSONResponse({"message": message}, status_code=exc.status_code)
 
 
-@app.get('/api/test/')
-async def root():
+
+@app.get("/api")
+async def read_root():
     return {"message": "Hello World"}
 
-
+@app.get("/api/messages/protected", dependencies=[Depends(valid_token)])
+def protected():
+    return {"text": "This is a protected message."}
 
 
 
@@ -65,6 +71,5 @@ if __name__ == "__main__":
     uvicorn.run(app, 
                 host="localhost",
                 port=8000,
-
                 server_header=False)
     

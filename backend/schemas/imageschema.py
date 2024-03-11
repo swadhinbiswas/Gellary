@@ -1,8 +1,5 @@
 from typing import Optional, List, Any
-
-
-from pydantic import BaseModel,EmailStr,Field
-from model.imagemodel import ImageModel
+from pydantic import BaseModel,Field
 
 class ImageBase(BaseModel):
   name:str=Field(...,description="Name of the image")
