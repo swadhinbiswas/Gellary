@@ -2,6 +2,7 @@ from typing import List
 from decouple import config
 from pydantic import BaseSettings, AnyHttpUrl, validator
 
+
 class Settings(BaseSettings):
     SECRET_KEY: str=config("SECRET_KEY")
     PROJECT_NAME: str=config("PROJECT_NAME")
@@ -21,5 +22,8 @@ class Settings(BaseSettings):
         env_file_encoding = "utf-8"
         
         
+        
+        
+        
+settings=Settings()
 
-settings = Settings()

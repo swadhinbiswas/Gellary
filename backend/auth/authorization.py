@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 from passlib.context import CryptContext
 from typing import Any, Union
-from settings import setting 
+from auth.setting import setting 
 
 
 password_context= CryptContext(schemes=["bcrypt"], deprecated="auto")

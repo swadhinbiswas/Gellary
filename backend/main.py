@@ -3,8 +3,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from fastapi.encoders import jsonable_encoder 
 import secure 
-from auth.dependency import valid_token,PermissionValidation
-from settings.setting import settings
+from auth.dependency import valid_token
+from auth.setting import settings
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 
