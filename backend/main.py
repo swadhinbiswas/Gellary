@@ -41,7 +41,6 @@ async def set_secure_headers(request, call_next):
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
-    
     allow_credentials=True,
     allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allow_headers=["Authorization", "Content-Type", "Accept", "Accept-Encoding", "Accept-Language", "Origin", "Referer", "User-Agent", "X-Requested-With", "X-CSRF-Token", "X-CSRFToken", "X-XSRF-TOKEN"],
@@ -57,11 +56,15 @@ async def http_exception_handler(request, exc):
 
 @app.get("/api")
 async def read_root():
-    return {"message": "Hello World"}
+    return {"text": "This is a protected message.",
+            "message": "Hello World",
+            "status": "ok",
+            "description": "This is a protected message."}
 
 @app.get("/api/messages/protected", dependencies=[Depends(valid_token)])
 def protected():
-    return {"text": "This is a protected message."}
+    return {"message": "This is a protected message."}
+    
 
 
 
@@ -69,6 +72,6 @@ if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, 
                 host="localhost",
-                port=8000,
-                server_header=False)
+                port=8000,)
+    
     
