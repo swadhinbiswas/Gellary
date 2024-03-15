@@ -15,19 +15,19 @@ app = FastAPI(
     description="Photo Doc"
 )
 
-csp=secure.ContentSecurityPolicy().default_src("'self'").frame_ancestors("'none'")
-hsts=secure.StrictTransportSecurity().max_age(31536000).include_subdomains()
-referrer=secure.ReferrerPolicy().no_referrer()
-cache_value=secure.CacheControl().no_cache().no_store().must_revalidate()
-x_frame=secure.XFrameOptions().deny()
-
+# csp=secure.ContentSecurityPolicy().default_src("'self'").frame_ancestors("'none'")
+# hsts=secure.StrictTransportSecurity().max_age(31536000).include_subdomains()
+# referrer=secure.ReferrerPolicy().no_referrer()
+# cache_value=secure.CacheControl().no_cache().no_store().must_revalidate()
+# x_frame=secure.XFrameOptions().deny()
+#   csp=csp,
+#     hsts=hsts,
+#     referrer=referrer,
+#     cache=cache_value,
+#     xfo=x_frame,
 
 secure_headers = secure.Secure(
-    csp=csp,
-    hsts=hsts,
-    referrer=referrer,
-    cache=cache_value,
-    xfo=x_frame,
+  
     
     
 )
@@ -71,7 +71,6 @@ def protected():
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, 
-                host="localhost",
-                port=8000,)
-    
+                host="192.168.0.104",
+                )
     
