@@ -34,10 +34,10 @@ app = FastAPI()
 class Settings(BaseSettings):
    app_name: str = "Awesome API"
    session_secret: str=token
-   domain: str="testforprojectsx.us.auth0.com"
-   client_id: str="I8hJ9FE4KTxNOYl3cJAVjNSxFVWaATyK"
-   client_secret: str="t37gQnVqwPy7UsBgeqZ8BBQdNMDs7pREULoRWNb9W46wNK0OIcHe3DuCkP3X7Jtd"
-   audience: str="https://worker-shrill-brook-ae32.beflix.workers.dev"
+   domain: str=""
+   client_id: str=""
+   client_secret: str=""
+   audience: str=""
    
    #model_config=SettingsConfigDict(env_file=".env",env_prefix="auth0_")
    

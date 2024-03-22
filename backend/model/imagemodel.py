@@ -2,8 +2,6 @@ from beanie import Document,Indexed
 from typing import List,Any,Final
 from datetime import datetime
 
-from matplotlib.pylab import f
-
 class ImageModel(Document):
   image_id: str=Indexed()
   name: str
