@@ -1,5 +1,5 @@
 import http.client
-from setting import settings
+from configer import settings
 import asyncio
 
 conn = http.client.HTTPSConnection(f"{settings.AUTH0_DOMAIN}")
@@ -15,6 +15,5 @@ async def getToken(conn,client_id,client_secret,audience)->str:
     data = res.read()
     text=data.decode("utf-8")
     token=text.split('"')[3]
+   
     return token
-
-

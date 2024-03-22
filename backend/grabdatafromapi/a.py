@@ -51,3 +51,39 @@
 # if __name__=="__main__":
 #   chatGt()
 
+from fastapi import FastAPI, Depends, HTTPException, status
+from fastapi.security import OAuth2PasswordBearer
+from pydantic import BaseModel
+
+# Replace with your actual values
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/token")  # Configure token endpoint
+
+# Define a model for user data (optional)
+class User(BaseModel):
+  user_id: str
+  # Add other relevant user information
+
+# Dependency for verifying JWT token
+async def get_current_user(token: str = Depends(oauth2_scheme)):
+  # Validate token using Auth0 library (not included here)
+  # Raise exception for invalid token
+  credentials_exception = HTTPException(
+      status_code=status.HTTP_401_UNAUTHORIZED,
+      detail="Could not validate credentials",
+      headers={"WWW-Authenticate": "Bearer"},
+  )
+  # Replace with your validation logic using Auth0 library
+  # user = validate_token(token)  # Hypothetical validation function
+  raise credentials_exception  # Placeholder for now
+
+app = FastAPI()
+
+@app.get("/authorized")
+async def secured_resource(current_user: User = Depends(get_current_user)):
+  # Access user information from current_user object (if defined in model)
+  # return {"message": f"Welcome, {current_user.user_id}!"}  # Example with user data
+  return {"message": "Secured Resource"}
+
+if __name__=="__main__":
+  import uvicorn
+  uvicorn.run(app, host="localhost", port=8000)

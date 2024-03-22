@@ -10,7 +10,6 @@ class Settings(BaseSettings):
     
     SECRET_KEY: str=config("SECRET_KEY",cast=str)
     app_name: str = "Awesome API"
-    
     PROJECT_NAME: str=config("PROJECT_NAME",cast=str)
     ALGORITHM:str=config("ALGORITHM",cast=str)
     AUTH0_DOMAIN:str=config("AUTH0_DOMAIN",cast=str)

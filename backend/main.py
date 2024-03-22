@@ -1,76 +1,57 @@
-from fastapi import FastAPI,Depends
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
-import secure 
-from auth.dependency import valid_token
-from auth.setting import settings
-from starlette.exceptions import HTTPException as StarletteHTTPException
+from fastapi.responses import RedirectResponse
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
+from fastapi.responses import HTMLResponse
+from fastapi import Request
+from fastapi import APIRouter
+from fastapi import Depends
+from fastapi import HTTPException
+from fastapi import status
+from fastapi import Form
+from fastapi import File
+from fastapi import UploadFile
+from fastapi import BackgroundTasks
+from fastapi import Query
+from fastapi import Cookie
+from fastapi import Header
+from fastapi import Response
+from fastapi import WebSocket
+from fastapi import WebSocketDisconnect
+from fastapi import Body
+from fastapi import Path
+from fastapi import Security
+from api.v1.handelars import authhandelar
 
 
 
 
+appex = FastAPI()
+appex.include_router(authhandelar.router, prefix="/auth")
 
 
-app = FastAPI(
-    description="Photo Doc"
-)
 
-# csp=secure.ContentSecurityPolicy().default_src("'self'").frame_ancestors("'none'")
-# hsts=secure.StrictTransportSecurity().max_age(31536000).include_subdomains()
-# referrer=secure.ReferrerPolicy().no_referrer()
-# cache_value=secure.CacheControl().no_cache().no_store().must_revalidate()
-# x_frame=secure.XFrameOptions().deny()
-#   csp=csp,
-#     hsts=hsts,
-#     referrer=referrer,
-#     cache=cache_value,
-#     xfo=x_frame,
 
-secure_headers = secure.Secure(
-  
-    
-    
-)
+# appex.mount("/static", StaticFiles(directory="static"), name="static")
+templates = Jinja2Templates(directory="templates")
 
-@app.middleware("http")
-async def set_secure_headers(request, call_next):
-    response = await call_next(request)
-    secure_headers.framework.fastapi(response)
-    return response
-
-app.add_middleware(
+appex.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
     allow_credentials=True,
-    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allow_headers=["Authorization", "Content-Type", "Accept", "Accept-Encoding", "Accept-Language", "Origin", "Referer", "User-Agent", "X-Requested-With", "X-CSRF-Token", "X-CSRFToken", "X-XSRF-TOKEN"],
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
-@app.exception_handler(StarletteHTTPException)
-async def http_exception_handler(request, exc):
-    message = str(exc.detail)
+router = APIRouter()
 
-    return JSONResponse({"message": message}, status_code=exc.status_code)
-
-
-
-@app.get("/api")
-async def read_root():
-    return {"text": "This is a protected message.",
-            "message": "Hello World",
-            "status": "ok",
-            "description": "This is a protected message."}
-
-@app.get("/api/messages/protected", dependencies=[Depends(valid_token)])
-def protected():
-    return {"message": "This is a protected message."}
-    
-
+@appex.get("/", response_class=HTMLResponse)
+async def read_item(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
 
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, 
-                host="192.168.0.104",
-                )
     
+    uvicorn.run(appex, host="0.0.0.0", port=8000)  
