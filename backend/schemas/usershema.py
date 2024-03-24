@@ -4,9 +4,9 @@ from uuid import UUID, uuid4
 from typing import Optional,List
 
 class UseBase(BaseModel):
-  username:str=Field(...,description="Name of the user")
+  username:str=Field(...,description="Name of the user",min_length=5,max_length=50)
   email:Optional[str]=Field(...,description="Email of the user")
-  password:Optional[str]=Field(...,description="Password of the user")
+  password:str=Field(...,description="Password of the user",min_length=8,max_length=50)
   userpicture:Optional[str]=Field(...,description="User picture")
   gallary:Optional[List[str]]=Field([],description="List of image ids")
   tags:Optional[List[str]]=Field([],description="List of tags")

@@ -19,3 +19,4 @@ starlette
 typing_extensions
 uvicorn
 setuptools 
+python-multipart

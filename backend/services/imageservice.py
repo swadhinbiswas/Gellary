@@ -26,6 +26,29 @@ class ImageService:
       raise pymongo.errors.OperationFailure("Image not found")
     await image.update({"$set":image.dict(exclude_unset=True)})
     return image
-  
-  
-
+  @staticmethod
+  def delete_image(imagename:str)->Optional[ImageModel]:
+    image= ImageModel.find_one(ImageModel.imagename==imagename)
+    if image is None:
+      raise pymongo.errors.OperationFailure("Image not found")
+    image.delete()
+  @staticmethod
+  async def get_all_images()->List[ImageModel]:
+    images=await ImageModel.find().to_list()
+    return images
+  @staticmethod
+  async def get_images_by_tag(tag:str)->List[ImageModel]:
+    images=await ImageModel.find(ImageModel.tags==tag).to_list()
+    return images
+  @staticmethod
+  async def get_images_by_tags(tags:List[str])->List[ImageModel]:
+    images=await ImageModel.find(ImageModel.tags.all(tags)).to_list()
+    return images
+  @staticmethod 
+  async def get_many(limit:int,skip:int)->List[ImageModel]:
+    images=await ImageModel.find().skip(skip).limit(limit).to_list()
+    return images
+  @staticmethod
+  async def get_by_search(search:str)->List[ImageModel]:
+    images=await ImageModel.find({"$text":{"$search":search}}).to_list()
+    return images

@@ -3,7 +3,7 @@ from typing import Coroutine, List,Any,Final, Optional
 from uuid import UUID,uuid4
 from beanie import Document,Indexed
 from pymongo.client_session import ClientSession
-from zmq import has
+from pydantic import EmailStr
 
 class UseModel(Document):
   
@@ -11,7 +11,7 @@ class UseModel(Document):
   username: Indexed(str,unique=True) # type: ignore
   frist_name: Optional[str]=None
   last_name: Optional[str]=None
-  email:Indexed(str,unique=True) # type: ignore
+  email:Indexed(EmailStr,unique=True) # type: ignore
   hashed_password: str
   userpicture: Optional[str]=None
   gallary:Optional[List[str]]=None
@@ -23,6 +23,8 @@ class UseModel(Document):
   
   def __str__(self) -> str:
     return self.__repr__()
+  def __hash__(self) -> EmailStr:
+    return hash(self.email)
   
   def __eq__(self, o: object) -> bool:
     if not isinstance(o,UseModel):
