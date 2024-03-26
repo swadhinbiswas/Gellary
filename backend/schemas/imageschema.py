@@ -7,6 +7,9 @@ class ImageBase(BaseModel):
   tags:List[str]=Field([],description="List of tags")
   image_path:str=Field(...,description="Path to the image")
   thumbnail_path:str=Field(...,description="Path to the thumbnail")
+
+  
+  
   
 class ImageOut(BaseModel):
   name:str

@@ -1,78 +1,59 @@
 from beanie import Document,Indexed
-from typing import List,Any,Final
+from typing import Coroutine, List,Any,Final
 from datetime import datetime
+from uuid import UUID,uuid4
+from pydantic import Field
+
+from pymongo.client_session import ClientSession
 
 class ImageModel(Document):
-  image_id: str=Indexed()
+  image_id:UUID = Field(default_factory=uuid4)
   name: str
   description: str
   tags: List[str]
-  created_at: datetime
-  updated_at: datetime
   image_path: str
   thumbnail_path: str
-
+  created_at: datetime=Field(default_factory=datetime.now)
+  updated_at: datetime=Field(default_factory=datetime.now)
+  
   def __repr__(self) -> str:
-    return f"ImageModel(name={self.name},description={self.description},tags={self.tags},created_at={self.created_at},updated_at={self.updated_at},image_path={self.image_path},thumbnail_path={self.thumbnail_path})"
+    return f"<ImageModel {self.tags}>"
   
   def __str__(self) -> str:
-    return self.__repr__()
-  
+    return f"<ImageModel {self.tags}>"
   def __eq__(self, o: object) -> bool:
-    if not isinstance(o,ImageModel):
+    if not isinstance(o, ImageModel):
       return False
-    return self.name == o.name and self.description == o.description and self.tags == o.tags and self.created_at == o.created_at and self.updated_at == o.updated_at and self.image_path == o.image_path and self.thumbnail_path == o.thumbnail_path
+    return self.image_id==o.image_id
   
-  def __ne__(self, o: object) -> bool:
-    return not self.__eq__(o)
-  
-  @property
-  def id(self) -> Any:
-    return self._id
+  def __hash__(self) -> int:
+    return hash(self.image_id)
   
   @property
-  def name(self) -> str:
-    return self._name
+  def create(self)->datetime:
+    return self.created_at
   
-  @property
-  def description(self) -> str:
-    return self._description
-  
-  @property
-  def tags(self) -> List[str]:
-    return self._tags
-  
-  @property
-  def created_at(self) -> datetime:
-    return self._created_at
-  
-  @property
-  def updated_at(self) -> datetime:
-    return self._updated_at
-  
-  @property
-  def image_path(self) -> str:
-    return self._image_path
-  
-  @property
-  def thumbnail_path(self) -> str:
-    return self._thumbnail_path
-  
-  @id.setter
-  def id(self, value: Any):
-    self._id = value
-    
-  @name.setter
-  def name(self, value: str):
-    self._name = value
-    
   @classmethod
-  async def get_by_title(cls, name:str ):
-    return await cls.get_one({"name":name})
-  @classmethod
-  async def get_by_tages(cls, tags:List[str]):
-    return await cls.get_many({"tags":tags})
+  async def getbytags(cls,tags:List[str],session:ClientSession):
+    return await cls.find({"tags":{"$in":tags}}).to_list()
+    
   
-  class Collection:
+ 
+  
+  class Settings:
     name="imagemodel"
+  
+  class Config:
+    
+    json_schema_extra={
+      "example":{
+        "name":"image",
+        "description":"This is an image",
+        "tags":["image","tag"],
+        "image_path":"https://path/to/image",
+        "thumbnail_path":"https://path/to/image/thumbnail",
+        "created_at":datetime.now(),
+      }
+    }
+    
 

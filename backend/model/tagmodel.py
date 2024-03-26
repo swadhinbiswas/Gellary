@@ -24,6 +24,6 @@ class TagModel(Document):
     return self._name
 
     
-  class Collection:
+  class Settings:
     name="tagmodel"
     

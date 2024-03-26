@@ -1,20 +1,25 @@
 import pymongo
 from typing import Optional,List
+from datetime import datetime
 from uuid import UUID, uuid4
 from schemas.imageschema import ImageBase,ImageOut,Update
 from model.imagemodel import ImageModel
 
 class ImageService:
   @staticmethod
-  async def create_image(image:ImageBase):
-    image_in=ImageModel(
-      imagename=image.imagename,
-      imagedescription=image.imagedescription,
-      imageurl=image.imageurl,
+  async def create_image(image:ImageBase)->ImageModel:
+    newimage=ImageModel(
+      image_id=uuid4(),
+      name=image.name,
+      description=image.description,
       tags=image.tags,
+      image_path=image.image_path,
+      thumbnail_path=image.thumbnail_path,
+      created_at=datetime.now(),
+      updated_at=datetime.now(),
     )
-    await image_in.save()
-    return image_in
+    await newimage.insert()
+  
   @staticmethod
   async def get_by_imagename(imagename:str)->Optional[ImageModel]:
     theimage= await ImageModel.find_one(ImageModel.imagename==imagename)
@@ -51,4 +56,12 @@ class ImageService:
   @staticmethod
   async def get_by_search(search:str)->List[ImageModel]:
     images=await ImageModel.find({"$text":{"$search":search}}).to_list()
+    return images
+  @staticmethod
+  async def select_random()->List[ImageModel]:
+    images=await ImageModel.aggregate([{"$sample":{"size":1}}]).to_list()
+    return images
+  @staticmethod
+  async def select_random_many(limit:int)->List[ImageModel]:
+    images=await ImageModel.aggregate([{"$sample":{"size":limit}}]).to_list()
     return images

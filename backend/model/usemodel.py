@@ -42,7 +42,7 @@ class UseModel(Document):
   async def get_user_by_username(cls,username:str,session:ClientSession)->Optional['UseModel']:
     return await cls.get_one({"username":username},session=session)
   
-  class Collection:
+  class Settings:
     name="usermodel"
 
 
